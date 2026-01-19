@@ -6,6 +6,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Keyboard,
 } from "react-native";
 import React, { useState } from "react";
 import List from "./List";
@@ -25,15 +26,22 @@ export default function App() {
   };
 
   const addToArray = () => {
+    Keyboard.dismiss();
+    const cleanText = text.trim();
     if (text && text.trim().length > 0) {
       const newTodo = {
         id: Math.random().toString(),
+        title: cleanText,
         title: text.trim(),
       };
       setList([newTodo, ...list]);
       setText("");
     }
   };
+  const removeTodo = (id) => {
+  const newList = list.filter((item) => item.id !== id);
+  setList(newList);
+};
 
   return (
     <View style={styles.container}>
@@ -61,6 +69,7 @@ export default function App() {
             title={item.title}
             completed={item.completed}
             onToggle={() => toggleTodo(item.id)}
+            onRemove={() => removeTodo(item.id)}
           />
         )}
       />
