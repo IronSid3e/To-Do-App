@@ -1,11 +1,12 @@
 import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, View, FlatList, Text } from "react-native";
+import { StyleSheet, View, FlatList, Text, Pressable } from "react-native";
 import { useState } from "react";
 import NewInput from "./components/NewInput";
 
 export default function App() {
   const [modalIsVisible, setModalIsVisible] = useState(false);
   const [elements, setElements] = useState([]);
+
   const startModal = () => {
     setModalIsVisible(true);
   };
@@ -13,30 +14,51 @@ export default function App() {
     setModalIsVisible(false);
   };
   const addElement = (elementTitle) => {
+    if (!elementTitle.trim()) return;
+    
     setElements((currentElements) => [
       ...currentElements,
       { text: elementTitle, id: Math.random().toString() },
     ]);
     endModal();
   };
+
   return (
     <>
       <StatusBar style="light" />
       <View style={styles.container}>
-        <Button title="Not Ekle" color="#4a0000" onPress={startModal} />
+        
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerText}>Notlarım</Text>
+        </View>
+
+        <Pressable 
+          style={({ pressed }) => [
+            styles.addButton, 
+            pressed && styles.addButtonPressed
+          ]}
+          onPress={startModal}
+        >
+          <Text style={styles.addButtonText}>+ Yeni Not Ekle</Text>
+        </Pressable>
+
         <NewInput
           visible={modalIsVisible}
           onAddElement={addElement}
           onCancel={endModal}
         />
-        <View>
+
+        <View style={styles.listContainer}>
           <FlatList
             data={elements}
+            keyExtractor={(item) => item.id}
+            alwaysBounceVertical={false}
             renderItem={({ item }) => (
-              <View>
-                <Text>{item.text}</Text>
+              <View style={styles.itemCard}>
+                <Text style={styles.itemText}>{item.text}</Text>
               </View>
             )}
+            contentContainerStyle={{ paddingBottom: 50 }} 
           />
         </View>
       </View>
@@ -47,7 +69,57 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50,
+    paddingTop: 60,
     paddingHorizontal: 20,
+    backgroundColor: '#1e293b',
+  },
+  headerContainer: {
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  headerText: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#e2e8f0',
+  },
+  addButton: {
+    backgroundColor: '#38bdf8',
+    paddingVertical: 15,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginBottom: 20,
+    elevation: 4,
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+  },
+  addButtonPressed: {
+    opacity: 0.7,
+  },
+  addButtonText: {
+    color: '#0f172a',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  listContainer: {
+    flex: 1,
+  },
+  itemCard: {
+    backgroundColor: '#334155',
+    marginVertical: 8,
+    padding: 16,
+    borderRadius: 10,
+    borderLeftWidth: 5,
+    borderLeftColor: '#38bdf8',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+  },
+  itemText: {
+    color: 'white',
+    fontSize: 16,
   },
 });
