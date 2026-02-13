@@ -1,9 +1,10 @@
 import { StatusBar } from "expo-status-bar";
 import { Button, StyleSheet, Text, View } from "react-native";
 import {useState} from "react";
+import NewInput from "./components/NewInput";
 
 export default function App() {
-  const [ModalIsVisible, setModalIsVisible] = useState(false);
+  const [modalIsVisible, setModalIsVisible] = useState(false);
   const startModel = () => {
     setModalIsVisible(true);
   };
@@ -12,6 +13,7 @@ export default function App() {
       <StatusBar style="light" />
       <View style={styles.container}>
         <Button title="Not Ekle" color="#4a0000" onPress={startModel}/>
+        <NewInput visible = {modalIsVisible}></NewInput>
       </View>
     </>
   );
