@@ -17,8 +17,8 @@ export default function NewInput({ visible, onAddElement, onCancel }) {
     setEnteredText("");
   };
 
-  const textInputHandler = (text) => {
-    setEnteredText(text);
+  const textInputHandler = (enteredText) => {
+    setEnteredText(enteredText);
   };
   return (
     <Modal animationType="slide" visible={visible}>
