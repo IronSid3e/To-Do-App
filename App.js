@@ -2,40 +2,28 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View, FlatList, Text, Pressable } from "react-native";
 import { useState } from "react";
 import NewInput from "./components/NewInput";
+import { useStore } from "./lib/store";
 
 export default function App() {
   const [modalIsVisible, setModalIsVisible] = useState(false);
-  const [elements, setElements] = useState([]);
 
-  const startModal = () => {
-    setModalIsVisible(true);
-  };
-  const endModal = () => {
-    setModalIsVisible(false);
-  };
-  const addElement = (elementTitle) => {
-    if (!elementTitle.trim()) return;
-    
-    setElements((currentElements) => [
-      ...currentElements,
-      { text: elementTitle, id: Math.random().toString() },
-    ]);
-    endModal();
-  };
+  const elements = useStore((state) => state.elements);
+
+  const startModal = () => setModalIsVisible(true);
+  const endModal = () => setModalIsVisible(false);
 
   return (
     <>
       <StatusBar style="light" />
       <View style={styles.container}>
-        
         <View style={styles.headerContainer}>
           <Text style={styles.headerText}>Notlarım</Text>
         </View>
 
-        <Pressable 
+        <Pressable
           style={({ pressed }) => [
-            styles.addButton, 
-            pressed && styles.addButtonPressed
+            styles.addButton,
+            pressed && styles.addButtonPressed,
           ]}
           onPress={startModal}
         >
@@ -44,7 +32,6 @@ export default function App() {
 
         <NewInput
           visible={modalIsVisible}
-          onAddElement={addElement}
           onCancel={endModal}
         />
 
@@ -58,7 +45,7 @@ export default function App() {
                 <Text style={styles.itemText}>{item.text}</Text>
               </View>
             )}
-            contentContainerStyle={{ paddingBottom: 50 }} 
+            contentContainerStyle={{ paddingBottom: 50 }}
           />
         </View>
       </View>
@@ -71,25 +58,25 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 60,
     paddingHorizontal: 20,
-    backgroundColor: '#1e293b',
+    backgroundColor: "#1e293b",
   },
   headerContainer: {
     marginBottom: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   headerText: {
     fontSize: 28,
-    fontWeight: 'bold',
-    color: '#e2e8f0',
+    fontWeight: "bold",
+    color: "#e2e8f0",
   },
   addButton: {
-    backgroundColor: '#38bdf8',
+    backgroundColor: "#38bdf8",
     paddingVertical: 15,
     borderRadius: 12,
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 20,
     elevation: 4,
-    shadowColor: 'black',
+    shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
@@ -98,28 +85,28 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   addButtonText: {
-    color: '#0f172a',
+    color: "#0f172a",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   listContainer: {
     flex: 1,
   },
   itemCard: {
-    backgroundColor: '#334155',
+    backgroundColor: "#334155",
     marginVertical: 8,
     padding: 16,
     borderRadius: 10,
     borderLeftWidth: 5,
-    borderLeftColor: '#38bdf8',
+    borderLeftColor: "#38bdf8",
     elevation: 3,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
     shadowRadius: 2,
   },
   itemText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
   },
 });

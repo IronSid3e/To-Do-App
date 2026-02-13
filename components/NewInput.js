@@ -5,16 +5,22 @@ import {
   Image,
   TextInput,
   Text,
-  Pressable, // Button yerine Pressable kullanıyoruz
+  Pressable,
 } from "react-native";
 import { useState } from "react";
+import { useStore } from "../lib/store";
 
-export default function NewInput({ visible, onAddElement, onCancel }) {
+export default function NewInput({ visible, onCancel }) {
   const [enteredText, setEnteredText] = useState("");
 
+  const addNote = useStore((state) => state.addNote);
+
   const addNewElement = () => {
-    onAddElement(enteredText);
+    if (!enteredText.trim()) return;
+    
+    addNote(enteredText);
     setEnteredText("");
+    onCancel();
   };
 
   const textInputHandler = (enteredText) => {
@@ -25,7 +31,7 @@ export default function NewInput({ visible, onAddElement, onCancel }) {
     <Modal animationType="slide" visible={visible}>
       <View style={styles.inputContainer}>
         <Image style={styles.image} source={require("../assets/logo.png")} />
-        
+
         <TextInput
           style={styles.textInput}
           placeholder="Yeni Not Ekle.."
@@ -102,19 +108,19 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   buttonWrapper: {
-    width: '40%',
+    width: "40%",
   },
   button: {
     borderRadius: 12,
     padding: 15,
     elevation: 2,
-    alignItems: 'center',
+    alignItems: "center",
   },
   buttonCancel: {
-    backgroundColor: '#ef4444', 
+    backgroundColor: "#ef4444",
   },
   buttonAdd: {
-    backgroundColor: '#38bdf8',
+    backgroundColor: "#38bdf8",
   },
   pressed: {
     opacity: 0.75,
@@ -123,9 +129,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize: 16
+    fontSize: 16,
   },
   textAdd: {
-    color: "#0f172a"
-  }
+    color: "#0f172a",
+  },
 });
