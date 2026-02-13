@@ -8,6 +8,7 @@ export default function App() {
   const [modalIsVisible, setModalIsVisible] = useState(false);
 
   const elements = useStore((state) => state.elements);
+  const deleteTask = useStore((state) => state.deleteTask);
 
   const startModal = () => setModalIsVisible(true);
   const endModal = () => setModalIsVisible(false);
@@ -17,7 +18,7 @@ export default function App() {
       <StatusBar style="light" />
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <Text style={styles.headerText}>Notlarım</Text>
+          <Text style={styles.headerText}>To-Do List</Text>
         </View>
 
         <Pressable
@@ -27,7 +28,7 @@ export default function App() {
           ]}
           onPress={startModal}
         >
-          <Text style={styles.addButtonText}>+ Yeni Not Ekle</Text>
+          <Text style={styles.addButtonText}>+ Add New Task</Text>
         </Pressable>
 
         <NewInput
@@ -41,9 +42,14 @@ export default function App() {
             keyExtractor={(item) => item.id}
             alwaysBounceVertical={false}
             renderItem={({ item }) => (
-              <View style={styles.itemCard}>
-                <Text style={styles.itemText}>{item.text}</Text>
-              </View>
+              <Pressable 
+                onPress={() => deleteTask(item.id)}
+                style={({ pressed }) => pressed && styles.pressedItem}
+              >
+                <View style={styles.itemCard}>
+                  <Text style={styles.itemText}>{item.text}</Text>
+                </View>
+              </Pressable>
             )}
             contentContainerStyle={{ paddingBottom: 50 }}
           />
@@ -108,5 +114,8 @@ const styles = StyleSheet.create({
   itemText: {
     color: "white",
     fontSize: 16,
+  },
+  pressedItem: {
+    opacity: 0.5,
   },
 });
